@@ -1,177 +1,209 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BinaryWatchFace"
              x:Class="BinaryWatchFace.TextWatchApplication">
+    <Application.Resources>
+        <local:NegateBooleanConverter x:Key="inverter"/>
+    </Application.Resources>
     <Application.MainPage>
-      <ContentPage BackgroundColor="{Binding BackgroundColor}">
-        <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" ColumnSpacing="0" RowSpacing="0">
-          <Grid.ColumnDefinitions >
-            <ColumnDefinition Width="60" />
-            <ColumnDefinition Width="240" />
-            <ColumnDefinition Width="60" />
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="120" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="80" />
-          </Grid.RowDefinitions>
-          <!-- Powers of Two -->
-          <BoxView Grid.Column="1" Grid.Row="1" 
-                 
-                 Color="{Binding PowersOfTwoColor}" />
-          <!-- Powers of Two -->
-          <BoxView Grid.Column="1" Grid.Row="3" 
-                 
-                 Color="{Binding PowersOfTwoColor}" />
-          <!-- Background Mask -->
-          <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" Grid.ColumnSpan="3" Source="bg_mask.png"/>
-          <Grid Grid.Column="1" Grid.Row="2" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" ColumnSpacing="0" RowSpacing="0">
-            <Grid.ColumnDefinitions >
-              <!-- bit 32 -->
-              <ColumnDefinition Width="40" />              
-              <!-- bit 16 -->
-              <ColumnDefinition Width="40" />              
-              <!-- bit 8 -->
-              <ColumnDefinition Width="40" />              
-              <!-- bit 4 -->
-              <ColumnDefinition Width="40" />              
-              <!-- bit 2 -->
-              <ColumnDefinition Width="40" />              
-              <!-- bit 1 -->
-              <ColumnDefinition Width="40" />              
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <!-- Hours -->
-              <RowDefinition Height="40" />              
-              <!-- Minutes -->
-              <RowDefinition Height="40" />              
-              <!-- Seconds -->
-              <RowDefinition Height="{Binding SecondsRowHeight}" />                         
-            </Grid.RowDefinitions>           
-            <!-- Ambient Foreground Color -->
-            <BoxView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6" Grid.RowSpan="3"
-                   IsVisible="{Binding AmbientMode}"
-                   Color="#888888" />            
-            <!-- hour bits on -->
-            <Image Grid.Column="1" Grid.Row="0"
-                   IsVisible="{Binding IsHours16Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="2" Grid.Row="0"
-                   IsVisible="{Binding IsHours8Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="3" Grid.Row="0"
-                   IsVisible="{Binding IsHours4Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="4" Grid.Row="0"
-                   IsVisible="{Binding IsHours2Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="5" Grid.Row="0"
-                   IsVisible="{Binding IsHours1Visible}"
-                   Source="{Binding BitOnImage}" />
+        <ContentPage>
+            <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" ColumnSpacing="0" RowSpacing="0">
+                <Grid.ColumnDefinitions >                    
+                    <ColumnDefinition Width="360" />                    
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>                    
+                    <RowDefinition Height="360" />                    
+                </Grid.RowDefinitions>               
 
-            <!-- hour bits off -->
-            <Image Grid.Column="0" Grid.Row="0"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="1" Grid.Row="0"
-                   IsVisible="{Binding IsNotHours16Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="2" Grid.Row="0"
-                   IsVisible="{Binding IsNotHours8Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="3" Grid.Row="0"
-                   IsVisible="{Binding IsNotHours4Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="4" Grid.Row="0"
-                   IsVisible="{Binding IsNotHours2Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="5" Grid.Row="0"
-                   IsVisible="{Binding IsNotHours1Visible}"
-                   Source="{Binding BitOffImage}" />
+                <!-- Active Mode Display -->
+                <Grid Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" ColumnSpacing="0" RowSpacing="0" IsVisible="{Binding AmbientMode, Converter={StaticResource inverter}}" BackgroundColor="{Binding BackgroundColor}">
+                    <Grid.ColumnDefinitions >
+                        
+                        <!-- Empty Region -->
+                        <ColumnDefinition Width="60" />
+                        <!-- bit 32 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 16 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 8 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 4 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 2 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 1 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- Empty Region -->
+                        <ColumnDefinition Width="60" />
+                        
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        
+                        <!-- Empty Region -->
+                        <RowDefinition Height="80" />
+                        <!-- Powers of Two -->
+                        <RowDefinition Height="40" />
+                        <!-- Hours -->
+                        <RowDefinition Height="40" />
+                        <!-- Minutes -->
+                        <RowDefinition Height="40" />
+                        <!-- Seconds -->
+                        <RowDefinition Height="40" />
+                        <!-- Powers of Two -->
+                        <RowDefinition Height="40" />
+                        <!-- Empty Region -->
+                        <RowDefinition Height="80" />
+                        
+                    </Grid.RowDefinitions>
 
-            <!-- minute bits on -->
-            <Image Grid.Column="0" Grid.Row="1"
-                   IsVisible="{Binding IsMinutes32Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="1" Grid.Row="1"
-                   IsVisible="{Binding IsMinutes16Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="2" Grid.Row="1"
-                   IsVisible="{Binding IsMinutes8Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="3" Grid.Row="1"
-                   IsVisible="{Binding IsMinutes4Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="4" Grid.Row="1"
-                   IsVisible="{Binding IsMinutes2Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="5" Grid.Row="1"
-                   IsVisible="{Binding IsMinutes1Visible}"
-                   Source="{Binding BitOnImage}" />
+                    <!-- Background Mask -->
+                    <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="7" Grid.ColumnSpan="8" Source="bg_mask.png"/>
+                    
+                    <!-- Powers of Two -->
+                    <BoxView Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="6" Color="{Binding PowersOfTwoColor}" />
 
-            <!-- minute bits off -->
-            <Image Grid.Column="0" Grid.Row="1"
-                   IsVisible="{Binding IsNotMinutes32Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="1" Grid.Row="1"
-                   IsVisible="{Binding IsNotMinutes16Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="2" Grid.Row="1"
-                   IsVisible="{Binding IsNotMinutes8Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="3" Grid.Row="1"
-                   IsVisible="{Binding IsNotMinutes4Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="4" Grid.Row="1"
-                   IsVisible="{Binding IsNotMinutes2Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="5" Grid.Row="1"
-                   IsVisible="{Binding IsNotMinutes1Visible}"
-                   Source="{Binding BitOffImage}" />
+                    <!-- hour bits off -->
+                    <Image Grid.Column="1" Grid.Row="2" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="2" Grid.Row="2" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="3" Grid.Row="2" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="4" Grid.Row="2" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="5" Grid.Row="2" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="6" Grid.Row="2" Source="{Binding BitOffImage}" />
 
-            <!-- second bits on -->
-            <Image Grid.Column="0" Grid.Row="2"
-                   IsVisible="{Binding IsSeconds32Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="1" Grid.Row="2"
-                   IsVisible="{Binding IsSeconds16Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="2" Grid.Row="2"
-                   IsVisible="{Binding IsSeconds8Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="3" Grid.Row="2"
-                   IsVisible="{Binding IsSeconds4Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="4" Grid.Row="2"
-                   IsVisible="{Binding IsSeconds2Visible}"
-                   Source="{Binding BitOnImage}" />
-            <Image Grid.Column="5" Grid.Row="2"
-                   IsVisible="{Binding IsSeconds1Visible}"
-                   Source="{Binding BitOnImage}" />
+                    <!-- hour bits on -->
+                    <BoxView Grid.Column="2" Grid.Row="2" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours16On}" />
+                    <Image Grid.Column="2" Grid.Row="2" IsVisible="{Binding IsHours16On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="3" Grid.Row="2" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours8On}" />
+                    <Image Grid.Column="3" Grid.Row="2" IsVisible="{Binding IsHours8On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="4" Grid.Row="2" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours4On}" />
+                    <Image Grid.Column="4" Grid.Row="2" IsVisible="{Binding IsHours4On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="5" Grid.Row="2" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours2On}" />
+                    <Image Grid.Column="5" Grid.Row="2" IsVisible="{Binding IsHours2On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="6" Grid.Row="2" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours1On}" />
+                    <Image Grid.Column="6" Grid.Row="2" IsVisible="{Binding IsHours1On}" Source="{Binding BitOnImage}" />
 
-            <!-- second bits off -->
-            <Image Grid.Column="0" Grid.Row="2"
-                   IsVisible="{Binding IsNotSeconds32Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="1" Grid.Row="2"
-                   IsVisible="{Binding IsNotSeconds16Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="2" Grid.Row="2"
-                   IsVisible="{Binding IsNotSeconds8Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="3" Grid.Row="2"
-                   IsVisible="{Binding IsNotSeconds4Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="4" Grid.Row="2"
-                   IsVisible="{Binding IsNotSeconds2Visible}"
-                   Source="{Binding BitOffImage}" />
-            <Image Grid.Column="5" Grid.Row="2"
-                   IsVisible="{Binding IsNotSeconds1Visible}"
-                   Source="{Binding BitOffImage}" />
+                    <!-- minute bits off -->
+                    <Image Grid.Column="1" Grid.Row="3" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="2" Grid.Row="3" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="3" Grid.Row="3" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="4" Grid.Row="3" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="5" Grid.Row="3" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="6" Grid.Row="3" Source="{Binding BitOffImage}" />
 
-          </Grid>
-        </Grid>
+                    <!-- minute bits on -->
+                    <BoxView Grid.Column="1" Grid.Row="3" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes32On}" />
+                    <Image Grid.Column="1" Grid.Row="3" IsVisible="{Binding IsMinutes32On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="2" Grid.Row="3" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes16On}" />
+                    <Image Grid.Column="2" Grid.Row="3" IsVisible="{Binding IsMinutes16On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="3" Grid.Row="3" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes8On}" />
+                    <Image Grid.Column="3" Grid.Row="3" IsVisible="{Binding IsMinutes8On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="4" Grid.Row="3" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes4On}" />
+                    <Image Grid.Column="4" Grid.Row="3" IsVisible="{Binding IsMinutes4On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="5" Grid.Row="3" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes2On}" />
+                    <Image Grid.Column="5" Grid.Row="3" IsVisible="{Binding IsMinutes2On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="6" Grid.Row="3" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes1On}" />
+                    <Image Grid.Column="6" Grid.Row="3" IsVisible="{Binding IsMinutes1On}" Source="{Binding BitOnImage}" />
+
+                    <!-- second bits off -->
+                    <Image Grid.Column="1" Grid.Row="4" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="2" Grid.Row="4" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="3" Grid.Row="4" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="4" Grid.Row="4" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="5" Grid.Row="4" Source="{Binding BitOffImage}" />
+                    <Image Grid.Column="6" Grid.Row="4" Source="{Binding BitOffImage}" />
+
+                    <!-- second bits on -->
+                    <BoxView Grid.Column="1" Grid.Row="4" Color="{Binding BackgroundColor}" IsVisible="{Binding IsSeconds32On}" />
+                    <Image Grid.Column="1" Grid.Row="4" IsVisible="{Binding IsSeconds32On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="2" Grid.Row="4" Color="{Binding BackgroundColor}" IsVisible="{Binding IsSeconds16On}" />
+                    <Image Grid.Column="2" Grid.Row="4" IsVisible="{Binding IsSeconds16On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="3" Grid.Row="4" Color="{Binding BackgroundColor}" IsVisible="{Binding IsSeconds8On}" />
+                    <Image Grid.Column="3" Grid.Row="4" IsVisible="{Binding IsSeconds8On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="4" Grid.Row="4" Color="{Binding BackgroundColor}" IsVisible="{Binding IsSeconds4On}" />
+                    <Image Grid.Column="4" Grid.Row="4" IsVisible="{Binding IsSeconds4On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="5" Grid.Row="4" Color="{Binding BackgroundColor}" IsVisible="{Binding IsSeconds2On}" />
+                    <Image Grid.Column="5" Grid.Row="4" IsVisible="{Binding IsSeconds2On}" Source="{Binding BitOnImage}" />
+                    <BoxView Grid.Column="6" Grid.Row="4" Color="{Binding BackgroundColor}" IsVisible="{Binding IsSeconds1On}" />
+                    <Image Grid.Column="6" Grid.Row="4" IsVisible="{Binding IsSeconds1On}" Source="{Binding BitOnImage}" />
+
+                    <!-- Powers of Two -->
+                    <BoxView Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="6" Color="{Binding PowersOfTwoColor}" />
+
+                </Grid>
+
+                <!-- Ambient Mode Display -->
+                <Grid Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" ColumnSpacing="0" RowSpacing="0" IsVisible="{Binding AmbientMode}" BackgroundColor="{Binding BackgroundColor}" >
+                    <Grid.ColumnDefinitions >
+
+                        <!-- bit 32 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 16 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 8 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 4 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 2 -->
+                        <ColumnDefinition Width="40" />
+                        <!-- bit 1 -->
+                        <ColumnDefinition Width="40" />
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+
+                        <!-- Hours -->
+                        <RowDefinition Height="40" />
+                        <!-- Minutes -->
+                        <RowDefinition Height="40" />
+
+                    </Grid.RowDefinitions>
+
+                    <!-- hour bits off -->
+                    <Image Grid.Column="0" Grid.Row="0" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="1" Grid.Row="0" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="2" Grid.Row="0" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="3" Grid.Row="0" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="4" Grid.Row="0" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="5" Grid.Row="0" Source="{Binding BitOffAmbientImage}" />
+
+                    <!-- hour bits on -->
+                    <BoxView Grid.Column="1" Grid.Row="0" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours16On}" />
+                    <Image Grid.Column="1" Grid.Row="0" IsVisible="{Binding IsHours16On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="2" Grid.Row="0" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours8On}" />
+                    <Image Grid.Column="2" Grid.Row="0" IsVisible="{Binding IsHours8On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="3" Grid.Row="0" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours4On}" />
+                    <Image Grid.Column="3" Grid.Row="0" IsVisible="{Binding IsHours4On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="4" Grid.Row="0" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours2On}" />
+                    <Image Grid.Column="4" Grid.Row="0" IsVisible="{Binding IsHours2On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="5" Grid.Row="0" Color="{Binding BackgroundColor}" IsVisible="{Binding IsHours1On}" />
+                    <Image Grid.Column="5" Grid.Row="0" IsVisible="{Binding IsHours1On}" Source="{Binding BitOnAmbientImage}" />
+
+                    <!-- minute bits off -->
+                    <Image Grid.Column="0" Grid.Row="1" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="1" Grid.Row="1" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="2" Grid.Row="1" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="3" Grid.Row="1" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="4" Grid.Row="1" Source="{Binding BitOffAmbientImage}" />
+                    <Image Grid.Column="5" Grid.Row="1" Source="{Binding BitOffAmbientImage}" />
+
+                    <!-- minute bits on -->
+                    <BoxView Grid.Column="0" Grid.Row="1" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes32On}" />
+                    <Image Grid.Column="0" Grid.Row="1" IsVisible="{Binding IsMinutes32On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="1" Grid.Row="1" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes16On}" />
+                    <Image Grid.Column="1" Grid.Row="1" IsVisible="{Binding IsMinutes16On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="2" Grid.Row="1" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes8On}" />
+                    <Image Grid.Column="2" Grid.Row="1" IsVisible="{Binding IsMinutes8On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="3" Grid.Row="1" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes4On}" />
+                    <Image Grid.Column="3" Grid.Row="1" IsVisible="{Binding IsMinutes4On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="4" Grid.Row="1" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes2On}" />
+                    <Image Grid.Column="4" Grid.Row="1" IsVisible="{Binding IsMinutes2On}" Source="{Binding BitOnAmbientImage}" />
+                    <BoxView Grid.Column="5" Grid.Row="1" Color="{Binding BackgroundColor}" IsVisible="{Binding IsMinutes1On}" />
+                    <Image Grid.Column="5" Grid.Row="1" IsVisible="{Binding IsMinutes1On}" Source="{Binding BitOnAmbientImage}" />
+
+                </Grid>
+
+            </Grid>
         </ContentPage>
     </Application.MainPage>
 </Application>
