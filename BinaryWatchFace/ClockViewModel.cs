@@ -5,11 +5,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
+using System.Windows.Input;
 
 namespace BinaryWatchFace
 {
     public class ClockViewModel : INotifyPropertyChanged
     {
+        public enum BitStyle
+        {
+            DIGITS = 0, DIGITS_LED = 1, CIRCLES = 2, CIRCLES_LED = 3
+        }
+
+        public enum BitColor
+        {
+            BLUE = 0, GREEN = 1
+        }
+
         DateTime _time;
         bool _ambientMode;
         bool _militaryTime;
@@ -21,18 +32,111 @@ namespace BinaryWatchFace
         string _bitOnAmbientImage;
         string _bitOffAmbientImage;
         string _backgroundImage;
+        ICommand _tapCommand;
+        bool _customizeVisible;
+        BitStyle _style;
+        BitColor _color;
 
         public ClockViewModel()
         {
             // Initialize display            
             BackgroundColorSetting = Color.FromHex("#61A9FF"); // blue  // "#B2FF33": yellow-green     
             PowersOfTwoColor = Color.FromHex("#000000");
-            BitOnImage = "bit_circle_on_LED.png";
-            BitOffImage = "bit_circle_off.png";
-            BitOnAmbientImage = "bit_circle_on.png";
-            BitOffAmbientImage = "bit_circle_off.png";
+            WatchStyle = BitStyle.DIGITS_LED;
+            WatchColor = BitColor.BLUE;
             AmbientMode = false;
             MilitaryTime = false;
+            _tapCommand = new Command(OnTapped);            
+        }
+
+        public ICommand TapCommand
+        {
+            get { return _tapCommand; }
+        }
+
+        public BitStyle WatchStyle
+        {
+            get => _style;
+            set
+            {
+                if (_style == value) return;
+                _style = value;
+                switch (_style)
+                {
+                    case BitStyle.DIGITS:
+                        BitOnImage = "bit_digit_on.png";
+                        BitOffImage = "bit_digit_off.png";
+                        BitOnAmbientImage = "bit_digit_on.png";
+                        BitOffAmbientImage = "bit_digit_off.png";
+                        break;
+                    case BitStyle.DIGITS_LED:
+                        BitOnImage = "bit_digit_on_LED.png";
+                        BitOffImage = "bit_digit_off.png";
+                        BitOnAmbientImage = "bit_digit_on.png";
+                        BitOffAmbientImage = "bit_digit_off.png";
+                        break;
+                    case BitStyle.CIRCLES:
+                        BitOnImage = "bit_circle_on.png";
+                        BitOffImage = "bit_circle_off.png";
+                        BitOnAmbientImage = "bit_circle_on.png";
+                        BitOffAmbientImage = "bit_circle_off.png";
+                        break;
+                    case BitStyle.CIRCLES_LED:
+                        BitOnImage = "bit_circle_on_LED.png";
+                        BitOffImage = "bit_circle_off.png";
+                        BitOnAmbientImage = "bit_circle_on.png";
+                        BitOffAmbientImage = "bit_circle_off.png";
+                        break;
+                }
+            }                 
+        }
+
+        public BitColor WatchColor
+        {
+            get => _color;
+            set
+            {
+                if (_color == value) return;
+                _color = value;
+                switch (_color)
+                {
+                    case BitColor.BLUE:
+                        BackgroundColorSetting = Color.FromHex("#61A9FF"); // blue  
+                        break;
+                    case BitColor.GREEN:
+                        BackgroundColorSetting = Color.FromHex("#73E500"); // yellow-green
+                        break;                    
+                }
+            }
+        }
+
+        void OnTapped(object s)
+        {
+
+            switch (s)
+            {
+                case "Style":
+                    WatchStyle = (BitStyle)(((int)_style + 1) % Enum.GetNames(typeof(BitStyle)).Length);
+                    break;
+                case "Color":
+                    WatchColor = (BitColor)(((int)_color + 1) % Enum.GetNames(typeof(BitColor)).Length);
+                    break;
+                default:
+                    IsCustomizeVisible = !IsCustomizeVisible;
+                    break;
+            }                                          
+
+        }
+
+        public bool IsCustomizeVisible
+        {
+            get => _customizeVisible;
+            set
+            {
+                if (_customizeVisible == value) return;
+                _customizeVisible = value;
+                OnPropertyChanged(nameof(IsCustomizeVisible));
+            }
         }
 
         public DateTime Time
