@@ -9,15 +9,14 @@
     <Application.MainPage>
         <ContentPage>
             <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" ColumnSpacing="0" RowSpacing="0">
+                
                 <Grid.ColumnDefinitions >                    
                     <ColumnDefinition Width="360" />                    
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>                    
                     <RowDefinition Height="360" />                    
                 </Grid.RowDefinitions>
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="ShowCustomizeButton"></TapGestureRecognizer>
-                </Grid.GestureRecognizers>
+                
                 <!-- Active Mode Display -->
                 <Grid Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" ColumnSpacing="0" RowSpacing="0" IsVisible="{Binding AmbientMode, Converter={StaticResource inverter}}" BackgroundColor="{Binding BackgroundColor}">
                     <Grid.ColumnDefinitions >
@@ -58,13 +57,18 @@
                         <RowDefinition Height="80" />
                         
                     </Grid.RowDefinitions>
+                    
+                    <!-- Powers of Two -->                    
+                    <BoxView Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="6" Color="{Binding PowersOfTwoColor}" />
+                    <BoxView Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="6" Color="#000000" IsVisible="{Binding PowersOfTwoVisible, Converter={StaticResource inverter}}" />
 
+                    <!-- Powers of Two -->
+                    <BoxView Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="6" Color="{Binding PowersOfTwoColor}" />
+                    <BoxView Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="6" Color="#000000" IsVisible="{Binding PowersOfTwoVisible, Converter={StaticResource inverter}}" />
+                    
                     <!-- Background Mask -->
                     <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="7" Grid.ColumnSpan="8" Source="bg_mask.png"/>
                     
-                    <!-- Powers of Two -->
-                    <BoxView Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="6" Color="{Binding PowersOfTwoColor}" />
-
                     <!-- hour bits off -->
                     <Image Grid.Column="1" Grid.Row="2" Source="{Binding BitOffImage}" />
                     <Image Grid.Column="2" Grid.Row="2" Source="{Binding BitOffImage}" />
@@ -129,21 +133,24 @@
                     <BoxView Grid.Column="6" Grid.Row="4" Color="{Binding BackgroundColor}" IsVisible="{Binding IsSeconds1On}" />
                     <Image Grid.Column="6" Grid.Row="4" IsVisible="{Binding IsSeconds1On}" Source="{Binding BitOnImage}" />
 
-                    <!-- Powers of Two -->
-                    <BoxView Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="6" Color="{Binding PowersOfTwoColor}" />
-                   
-                    <Button Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="6" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Text="Color" Margin="0,10,0,0" Opacity=".75" IsVisible="{Binding IsCustomizeVisible}">
+                    <BoxView Grid.Column="1" Grid.ColumnSpan="6" Grid.Row="2" Grid.RowSpan="3">
+                        <BoxView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="Customize"></TapGestureRecognizer>
+                        </BoxView.GestureRecognizers>
+                    </BoxView>
+
+                    <Button Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="6" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="End" Text="{Binding ColorButtonText}" Margin="0,0,0,20" Opacity=".75" IsVisible="{Binding IsCustomizeVisible}">
                         <Button.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="Color"></TapGestureRecognizer>
                         </Button.GestureRecognizers>
                     </Button>
 
-                    <Button Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="6" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Text="Style" Margin="0,0,0,10" Opacity=".75" IsVisible="{Binding IsCustomizeVisible}">
+                    <Button Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="6" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Start" Text="{Binding StyleButtonText}" Margin="0,20,0,0" Opacity=".75" IsVisible="{Binding IsCustomizeVisible}">
                         <Button.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="Style"></TapGestureRecognizer>
                         </Button.GestureRecognizers>
-
                     </Button>
+                    
                 </Grid>
 
                 <!-- Ambient Mode Display -->

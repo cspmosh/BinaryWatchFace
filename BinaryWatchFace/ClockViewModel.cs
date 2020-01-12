@@ -11,19 +11,10 @@ namespace BinaryWatchFace
 {
     public class ClockViewModel : INotifyPropertyChanged
     {
-        public enum BitStyle
-        {
-            DIGITS = 0, DIGITS_LED = 1, CIRCLES = 2, CIRCLES_LED = 3
-        }
-
-        public enum BitColor
-        {
-            BLUE = 0, GREEN = 1
-        }
-
         DateTime _time;
         bool _ambientMode;
         bool _militaryTime;
+        bool _powersOfTwoVisible;
         Color _powersOfTwoColor;
         Color _backgroundColor;
         Color _backgroundColorSetting;
@@ -32,111 +23,30 @@ namespace BinaryWatchFace
         string _bitOnAmbientImage;
         string _bitOffAmbientImage;
         string _backgroundImage;
-        ICommand _tapCommand;
         bool _customizeVisible;
-        BitStyle _style;
-        BitColor _color;
+        BitStyle _style = 0;
+        BitColor _color = 0;
+        string _colorButtonText = "Color";
+        string _styleButtonText = "Style";
+        readonly ICommand _tapCommand;
+
+        public enum BitStyle
+        {
+            CIRCLES_LED = 0, CIRCLES_LED_POW = 1, DIGITS = 2, DIGITS_POW = 3, DIGITS_LED = 4, DIGITS_LED_POW = 5, CIRCLES = 6, CIRCLES_POW = 7
+        }
+        public enum BitColor
+        {
+            SKY_BLUE = 0, BLUE = 1, PURPLE = 2, FUSCIA = 3, PINK = 4, RED = 5, MORO = 6, ORANGE = 7, YELLOW = 8, CHARTREUSE = 9, GREEN = 10, TURQOUISE = 11, LIGHT_BLUE = 12, GRAY = 13
+        }
 
         public ClockViewModel()
         {
-            // Initialize display            
-            BackgroundColorSetting = Color.FromHex("#61A9FF"); // blue  // "#B2FF33": yellow-green     
-            PowersOfTwoColor = Color.FromHex("#000000");
-            WatchStyle = BitStyle.DIGITS_LED;
-            WatchColor = BitColor.BLUE;
+            // Initialize display          
+            WatchStyle = BitStyle.CIRCLES_LED;
+            WatchColor = BitColor.SKY_BLUE;
             AmbientMode = false;
             MilitaryTime = false;
-            _tapCommand = new Command(OnTapped);            
-        }
-
-        public ICommand TapCommand
-        {
-            get { return _tapCommand; }
-        }
-
-        public BitStyle WatchStyle
-        {
-            get => _style;
-            set
-            {
-                if (_style == value) return;
-                _style = value;
-                switch (_style)
-                {
-                    case BitStyle.DIGITS:
-                        BitOnImage = "bit_digit_on.png";
-                        BitOffImage = "bit_digit_off.png";
-                        BitOnAmbientImage = "bit_digit_on.png";
-                        BitOffAmbientImage = "bit_digit_off.png";
-                        break;
-                    case BitStyle.DIGITS_LED:
-                        BitOnImage = "bit_digit_on_LED.png";
-                        BitOffImage = "bit_digit_off.png";
-                        BitOnAmbientImage = "bit_digit_on.png";
-                        BitOffAmbientImage = "bit_digit_off.png";
-                        break;
-                    case BitStyle.CIRCLES:
-                        BitOnImage = "bit_circle_on.png";
-                        BitOffImage = "bit_circle_off.png";
-                        BitOnAmbientImage = "bit_circle_on.png";
-                        BitOffAmbientImage = "bit_circle_off.png";
-                        break;
-                    case BitStyle.CIRCLES_LED:
-                        BitOnImage = "bit_circle_on_LED.png";
-                        BitOffImage = "bit_circle_off.png";
-                        BitOnAmbientImage = "bit_circle_on.png";
-                        BitOffAmbientImage = "bit_circle_off.png";
-                        break;
-                }
-            }                 
-        }
-
-        public BitColor WatchColor
-        {
-            get => _color;
-            set
-            {
-                if (_color == value) return;
-                _color = value;
-                switch (_color)
-                {
-                    case BitColor.BLUE:
-                        BackgroundColorSetting = Color.FromHex("#61A9FF"); // blue  
-                        break;
-                    case BitColor.GREEN:
-                        BackgroundColorSetting = Color.FromHex("#73E500"); // yellow-green
-                        break;                    
-                }
-            }
-        }
-
-        void OnTapped(object s)
-        {
-
-            switch (s)
-            {
-                case "Style":
-                    WatchStyle = (BitStyle)(((int)_style + 1) % Enum.GetNames(typeof(BitStyle)).Length);
-                    break;
-                case "Color":
-                    WatchColor = (BitColor)(((int)_color + 1) % Enum.GetNames(typeof(BitColor)).Length);
-                    break;
-                default:
-                    IsCustomizeVisible = !IsCustomizeVisible;
-                    break;
-            }                                          
-
-        }
-
-        public bool IsCustomizeVisible
-        {
-            get => _customizeVisible;
-            set
-            {
-                if (_customizeVisible == value) return;
-                _customizeVisible = value;
-                OnPropertyChanged(nameof(IsCustomizeVisible));
-            }
+            _tapCommand = new Command(OnTapped);
         }
 
         public DateTime Time
@@ -154,15 +64,190 @@ namespace BinaryWatchFace
             }
         }
 
-        public bool MilitaryTime
+        public ICommand TapCommand
         {
-            get => _militaryTime;
+            get { return _tapCommand; }
+        }
+        void OnTapped(object s)
+        {
+
+            switch (s)
+            {
+                case "Style":
+                    WatchStyle = (BitStyle)(((int)_style + 1) % Enum.GetNames(typeof(BitStyle)).Length);
+                    break;
+                case "Color":
+                    WatchColor = (BitColor)(((int)_color + 1) % Enum.GetNames(typeof(BitColor)).Length);
+                    break;
+                case "Customize":
+                    IsCustomizeVisible = !IsCustomizeVisible;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public BitStyle WatchStyle
+        {
+            get => _style;
+            set
+            {                
+                _style = value;
+                switch (_style)
+                {
+                    case BitStyle.DIGITS:
+                        BitOnImage = "bit_digit_on.png";
+                        BitOffImage = "bit_digit_off.png";
+                        BitOnAmbientImage = "bit_digit_on.png";
+                        BitOffAmbientImage = "bit_digit_off.png";
+                        PowersOfTwoVisible = false;
+                        break;
+                    case BitStyle.DIGITS_POW:
+                        BitOnImage = "bit_digit_on.png";
+                        BitOffImage = "bit_digit_off.png";
+                        BitOnAmbientImage = "bit_digit_on.png";
+                        BitOffAmbientImage = "bit_digit_off.png";
+                        PowersOfTwoVisible = true;
+                        break;
+                    case BitStyle.DIGITS_LED:
+                        BitOnImage = "bit_digit_on_LED.png";
+                        BitOffImage = "bit_digit_off.png";
+                        BitOnAmbientImage = "bit_digit_on.png";
+                        BitOffAmbientImage = "bit_digit_off.png";
+                        PowersOfTwoVisible = false;
+                        break;
+                    case BitStyle.DIGITS_LED_POW:
+                        BitOnImage = "bit_digit_on_LED.png";
+                        BitOffImage = "bit_digit_off.png";
+                        BitOnAmbientImage = "bit_digit_on.png";
+                        BitOffAmbientImage = "bit_digit_off.png";
+                        PowersOfTwoVisible = true;
+                        break;
+                    case BitStyle.CIRCLES:
+                        BitOnImage = "bit_circle_on.png";
+                        BitOffImage = "bit_circle_off.png";
+                        BitOnAmbientImage = "bit_circle_on.png";
+                        BitOffAmbientImage = "bit_circle_off.png";
+                        PowersOfTwoVisible = false;
+                        break;
+                    case BitStyle.CIRCLES_POW:
+                        BitOnImage = "bit_circle_on.png";
+                        BitOffImage = "bit_circle_off.png";
+                        BitOnAmbientImage = "bit_circle_on.png";
+                        BitOffAmbientImage = "bit_circle_off.png";
+                        PowersOfTwoVisible = true;
+                        break;
+                    case BitStyle.CIRCLES_LED:
+                        BitOnImage = "bit_circle_on_LED.png";
+                        BitOffImage = "bit_circle_off.png";
+                        BitOnAmbientImage = "bit_circle_on.png";
+                        BitOffAmbientImage = "bit_circle_off.png";
+                        PowersOfTwoVisible = false;
+                        break;
+                    case BitStyle.CIRCLES_LED_POW:
+                        BitOnImage = "bit_circle_on_LED.png";
+                        BitOffImage = "bit_circle_off.png";
+                        BitOnAmbientImage = "bit_circle_on.png";
+                        BitOffAmbientImage = "bit_circle_off.png";
+                        PowersOfTwoVisible = true;
+                        break;
+                }
+                StyleButtonText = "Style " + ((int)(_style) + 1) + "/" + Enum.GetNames(typeof(BitStyle)).Length;
+            }
+        }
+        public BitColor WatchColor
+        {
+            get => _color;
+            set
+            {                
+                _color = value;
+                switch (_color)
+                {
+                    case BitColor.RED:
+                        BackgroundColorSetting = Color.FromHex("#FF0000");
+                        break;
+                    case BitColor.MORO:
+                        BackgroundColorSetting = Color.FromHex("#FF5100");
+                        break;
+                    case BitColor.ORANGE:
+                        BackgroundColorSetting = Color.FromHex("#FF8B00");
+                        break;
+                    case BitColor.YELLOW:
+                        BackgroundColorSetting = Color.FromHex("#FFFF00");
+                        break;
+                    case BitColor.CHARTREUSE:
+                        BackgroundColorSetting = Color.FromHex("#AAFF00");
+                        break;
+                    case BitColor.GREEN:
+                        BackgroundColorSetting = Color.FromHex("#00FF00");
+                        break;
+                    case BitColor.TURQOUISE:
+                        BackgroundColorSetting = Color.FromHex("#00FFB6");
+                        break;
+                    case BitColor.LIGHT_BLUE:
+                        BackgroundColorSetting = Color.FromHex("#00FFFF");
+                        break;
+                    case BitColor.SKY_BLUE:
+                        BackgroundColorSetting = Color.FromHex("#00AAFF");
+                        break;
+                    case BitColor.BLUE:
+                        BackgroundColorSetting = Color.FromHex("#0055FF");
+                        break;
+                    case BitColor.PURPLE:
+                        BackgroundColorSetting = Color.FromHex("#9700FF");
+                        break;
+                    case BitColor.GRAY:
+                        BackgroundColorSetting = Color.FromHex("#555555");
+                        break;
+                    case BitColor.FUSCIA:
+                        BackgroundColorSetting = Color.FromHex("#EC00FF");
+                        break;
+                    case BitColor.PINK:
+                        BackgroundColorSetting = Color.FromHex("#FF00A6");
+                        break;
+                }
+                ColorButtonText = "Color " + ((int)(_color) + 1) + "/" + Enum.GetNames(typeof(BitColor)).Length;
+            }
+        }
+        public string StyleButtonText
+        {
+            get => _styleButtonText;
             set
             {
-                if (_militaryTime == value) return;
-                _militaryTime = value;
-                OnPropertyChanged(nameof(MilitaryTime));
-                convertHoursToBinary(_time.Hour);
+                if (_styleButtonText == value) return;
+                _styleButtonText = value;
+                OnPropertyChanged(nameof(StyleButtonText));
+            }
+        }
+        public string ColorButtonText
+        {
+            get => _colorButtonText;
+            set
+            {
+                if (_colorButtonText == value) return;
+                _colorButtonText = value;
+                OnPropertyChanged(nameof(ColorButtonText));
+            }
+        }
+
+        public bool PowersOfTwoVisible
+        {
+            get => _powersOfTwoVisible;
+            set
+            {
+                if (_powersOfTwoVisible == value) return;
+                _powersOfTwoVisible = value;
+                OnPropertyChanged(nameof(PowersOfTwoVisible));
+            }
+        }
+        public bool IsCustomizeVisible
+        {
+            get => _customizeVisible;
+            set
+            {
+                if (_customizeVisible == value) return;
+                _customizeVisible = value;
+                OnPropertyChanged(nameof(IsCustomizeVisible));
             }
         }
 
@@ -176,7 +261,6 @@ namespace BinaryWatchFace
                 OnPropertyChanged(nameof(PowersOfTwoColor));
             }
         }
-
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -187,18 +271,6 @@ namespace BinaryWatchFace
                 OnPropertyChanged(nameof(BackgroundColor));
             }
         }
-
-        public string BackgroundImage
-        {
-            get => _backgroundImage;
-            set
-            {
-                if (_backgroundImage == value) return;
-                _backgroundImage = value;
-                OnPropertyChanged(nameof(BackgroundImage));
-            }
-        }
-
         public Color BackgroundColorSetting
         {
             get => _backgroundColorSetting;
@@ -208,6 +280,7 @@ namespace BinaryWatchFace
                 _backgroundColorSetting = value;
                 OnPropertyChanged(nameof(BackgroundColorSetting));
                 BackgroundColor = _backgroundColorSetting;
+                PowersOfTwoColor = _backgroundColorSetting;
             }
         }
 
@@ -221,7 +294,7 @@ namespace BinaryWatchFace
 
                 if (_ambientMode)
                 {
-                    BackgroundColor = Color.FromHex("#888888");                    
+                    BackgroundColor = Color.FromHex("#888888");
                 }
                 else
                 {
@@ -229,7 +302,28 @@ namespace BinaryWatchFace
                 }
             }
         }
+        public bool MilitaryTime
+        {
+            get => _militaryTime;
+            set
+            {
+                if (_militaryTime == value) return;
+                _militaryTime = value;
+                OnPropertyChanged(nameof(MilitaryTime));
+                convertHoursToBinary(_time.Hour);
+            }
+        }
 
+        public string BackgroundImage
+        {
+            get => _backgroundImage;
+            set
+            {
+                if (_backgroundImage == value) return;
+                _backgroundImage = value;
+                OnPropertyChanged(nameof(BackgroundImage));
+            }
+        }
         public string BitOnImage
         {
             get => _bitOnImage;
