@@ -56,11 +56,10 @@ namespace BinaryWatchFace
             {
                 if (_time == value) return;
                 _time = value;
-                OnPropertyChanged();
-
+                OnPropertyChanged();                   
                 if (!AmbientMode) convertSecondsToBinary(_time.Second);
                 convertMinutesToBinary(_time.Minute);
-                convertHoursToBinary(_time.Hour);
+                convertHoursToBinary(_militaryTime ? _time.Hour : Convert.ToInt32(_time.ToString("%h")));
             }
         }
 
@@ -497,12 +496,7 @@ namespace BinaryWatchFace
 
         protected void convertHoursToBinary(int hours)
         {
-
-            if (!_militaryTime)
-            {
-                hours %= 12;
-            }
-
+                       
             bool isHours16On = (hours / 16 % 2 == 1);
 
             if (isHours16On.CompareTo(IsHours16On) != 0)
