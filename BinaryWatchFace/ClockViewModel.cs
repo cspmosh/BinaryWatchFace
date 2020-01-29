@@ -383,7 +383,7 @@ namespace BinaryWatchFace
         public bool IsHours4On { get; private set; }
         public bool IsHours8On { get; private set; }
         public bool IsHours16On { get; private set; }
-        public bool IsHours32On { get; private set; }
+        public bool IsHours32On { get; private set; } 
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.tizen.example.BinaryWatchFace" version="1.0.0" api-version="4" xmlns="http://tizen.org/ns/packages">
+<manifest package="com.cspmosh.binarygeek" version="1.0.0" api-version="4" xmlns="http://tizen.org/ns/packages">
     <author email="cs.pmosh@gmail.com">Josh Turner</author>
     <description>Customizable Binary WatchFace</description>
     <profile name="wearable" />
-    <watch-application appid="org.tizen.example.BinaryWatchFace" exec="BinaryWatchFace.dll" type="dotnet" ambient-support="true">
-        <label>Binary</label>
+    <watch-application appid="com.cspmosh.binarygeek" exec="BinaryWatchFace.dll" type="dotnet" ambient-support="true">
+        <label>BinaryGeek</label>
         <icon>BinaryWatchFace.png</icon>
         <metadata key="http://tizen.org/metadata/prefer_dotnet_aot" value="true" />
         <splash-screens />
